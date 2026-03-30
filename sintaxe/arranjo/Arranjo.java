@@ -25,6 +25,34 @@ public class Arranjo {
         return count;
     }
 
+    /**
+     * encontra e imprime o maior e o menor valor em um arranjo 
+     */
+    public static void printMinMax(int[] a){
+        int max = a[0], min = a[0];
+
+        for(int i = 1; i < a.length; i++){
+            if(a[i] > max){
+                max = a[i];
+            }
+
+            if(a[i] < min){
+                min = a[i];
+            }
+        }
+
+        System.out.printf("Menor: %d\nMaior: %d\n", min, max);
+    }
+
+    /**
+     * imprime um vetor invertido 
+     */
+    public static void printArrayInv(int[] a){
+        for(int i = a.length - 1; i >= 0; i--){
+            System.out.println(a[i]);
+        }
+    }
+
     public void printArray(double[] input){
         for(int i = 0; i < input.length; i++){
             System.out.println(input[i]);
@@ -46,6 +74,8 @@ public class Arranjo {
         }
 
         printArray(primes);
+        printMinMax(primes);
+        printArrayInv(primes);
         
     }
 

@@ -37,7 +37,7 @@ public class CreditCard{
         if(price + balance > (double) limit)
             return false;
         
-        balance += price;
+        balance += price * 1.02;        // debita juros de 2%
         return true;
     }
 
