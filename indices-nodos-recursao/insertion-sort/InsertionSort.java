@@ -34,7 +34,7 @@ public class InsertionSort{
 
         printArr(letras);
         insertionSort(letras);
-        System.out.println("array ordenado:");
+        System.out.println("\narray ordenado:");
         printArr(letras);
 
     }
