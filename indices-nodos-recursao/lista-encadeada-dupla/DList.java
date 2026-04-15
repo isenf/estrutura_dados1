@@ -69,6 +69,18 @@ public class DList<T extends Comparable<T>> {
         return v.getNext();
     }
 
+    public int getSize(){
+        DNode<T> cur = this.header.getNext();
+        int size = 0;
+
+        while(cur != tail){
+            size++;
+            cur = cur.getNext();
+        }
+
+        return size;
+    }
+
     /**
      * Insere um dado nodo z antes de um dado nodo v. Gera um erro se v é o
      * cabecalho
@@ -126,8 +138,9 @@ public class DList<T extends Comparable<T>> {
     }
 
 
-    /**
+    /** remove um objeto do tipo T
      * 
+     * @param s objeto a ser removido
      */
     public void remove(T s){
         if(s == null) return;
@@ -145,6 +158,34 @@ public class DList<T extends Comparable<T>> {
             cur = next;
         }
         
+    }
+
+    /** une duas listas duplamente encadeadas
+     * 
+     * @param L primeira lista
+     * @param M segunda lista 
+     */
+    public DList<T> concatenate(DList<T> L, DList<T> M){
+        if(M == null) return L;
+        if(L == null) return M;
+
+        DList<T> K = new DList<>();
+        DNode <T> cur = L.header.getNext();
+
+        while(cur != L.tail && cur.getNext() != null){
+            DNode<T> temp = new DNode<>(cur.getElement(), null, null);
+            K.addLast(temp);
+            cur = cur.getNext();
+        }
+        
+        cur = M.header.getNext();
+        while(cur != M.tail && cur.getNext() != null){
+            DNode<T> temp = new DNode<>(cur.getElement(), null, null);
+            K.addLast(temp);
+            cur = cur.getNext();
+        }
+
+        return K;
     }
 
     /**
@@ -190,8 +231,8 @@ public class DList<T extends Comparable<T>> {
         lista.addFirst(new DNode("EEE", null, null));
         
         System.out.println(lista);
-        lista.remove("CCC");
-        System.out.println(lista);
+        System.out.println(lista.getSize());
+        System.out.println(lista.concatenate(lista, lista));
 
     }
     
