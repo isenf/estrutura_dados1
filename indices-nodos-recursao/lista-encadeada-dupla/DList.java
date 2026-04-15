@@ -126,6 +126,26 @@ public class DList<T extends Comparable<T>> {
     }
 
 
+    /**
+     * 
+     */
+    public void remove(T s){
+        if(s == null) return;
+
+        DNode<T> cur = this.header.getNext(), next;
+
+        while(cur != tail){
+            T element = cur.getElement();
+            next = cur.getNext();
+
+            if(element != null && element.compareTo(s) == 0){
+                remove(cur);
+            }
+
+            cur = next;
+        }
+        
+    }
 
     /**
      * Indica se o nodo indicado possui um antecessor
@@ -158,5 +178,21 @@ public class DList<T extends Comparable<T>> {
         return s;
     }
 
+    public static void main(String[] args) {
+        DList<String> lista = new DList<>();
+
+        lista.addFirst(new DNode("AAA", null, null));
+        lista.addFirst(new DNode("BBB", null, null));
+        lista.addFirst(new DNode("CCC", null, null));
+        lista.addFirst(new DNode("DDD", null, null));
+        lista.addFirst(new DNode("CCC", null, null));
+        lista.addFirst(new DNode("CCC", null, null));
+        lista.addFirst(new DNode("EEE", null, null));
+        
+        System.out.println(lista);
+        lista.remove("CCC");
+        System.out.println(lista);
+
+    }
     
 }
