@@ -1,4 +1,4 @@
-/** Lista duplamente encadeada com nodos do tipo DNode que armazenam strings */
+/** Lista duplamente encadeada com nodos do tipo DNode com tipo genérico */
 public class DList<T extends Comparable<T>> {
 
     protected int size; // quantidade de elementos
@@ -126,8 +126,9 @@ public class DList<T extends Comparable<T>> {
     }
 
 
-    /**
+    /** remove um objeto do tipo T
      * 
+     * @param s objeto a ser removido
      */
     public void remove(T s){
         if(s == null) return;
@@ -145,6 +146,37 @@ public class DList<T extends Comparable<T>> {
             cur = next;
         }
         
+    }
+
+    /* 1) Implemente um método que recebe duas listas duplamente encadeadas, L e M, com sentinelas de cabeça, 
+    e devolva uma única lista K que contém todos os nodos de L seguidos por todos os nodos de M. */
+
+    /** une duas listas duplamente encadeadas
+     * 
+     * @param L primeira lista
+     * @param M segunda lista 
+     */
+    public DList<T> concatenate(DList<T> L, DList<T> M){
+        if(M == null) return L;
+        if(L == null) return M;
+
+        DList<T> K = new DList<>();
+        DNode <T> cur = L.header.getNext();
+
+        while(cur != L.tail && cur.getNext() != null){
+            DNode<T> temp = new DNode<>(cur.getElement(), null, null);
+            K.addLast(temp);
+            cur = cur.getNext();
+        }
+        
+        cur = M.header.getNext();
+        while(cur != M.tail && cur.getNext() != null){
+            DNode<T> temp = new DNode<>(cur.getElement(), null, null);
+            K.addLast(temp);
+            cur = cur.getNext();
+        }
+
+        return K;
     }
 
     /**
@@ -190,8 +222,7 @@ public class DList<T extends Comparable<T>> {
         lista.addFirst(new DNode("EEE", null, null));
         
         System.out.println(lista);
-        lista.remove("CCC");
-        System.out.println(lista);
+        System.out.println(lista.concatenate(lista, lista));
 
     }
     
