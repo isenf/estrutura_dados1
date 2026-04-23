@@ -1,4 +1,4 @@
-/** Lista encadeada circular com nodos do tipo Node que armazenam strings */
+/** Lista encadeada circular com nodos do tipo Node que armazenam tipos genéricos */
 public class CircleList<T extends Comparable<T>> {
 
     protected Node<T> cursor;	// o cursor corrente 
@@ -81,30 +81,22 @@ public class CircleList<T extends Comparable<T>> {
     public static <T extends Comparable<T>> boolean isEqual(CircleList<T> L, CircleList<T> M){
         if(M.getSize() != L.getSize()) return false;
 
-        SLinkedList<T> list_L =  new SLinkedList<>();
-        SLinkedList<T> list_M = new SLinkedList<>();
-
-        Node<T> aux = L.cursor;
-        do{
-            list_L.addFirst(new Node<T>(L.cursor.getElement(), null));
-            list_M.addFirst(new Node<T>(M.cursor.getElement(), null));
-
+        for(int i = 0; i < L.getSize(); i++){
+            boolean equal = true;
+            
+            for(int j = 0; j < L.getSize(); j++){
+                if(L.getCursor().getElement().compareTo(M.getCursor().getElement()) != 0){
+                    equal = false;
+                    break;
+                }
+                M.advance();
+                L.advance();
+            }
+        
+            if(equal) return true;
             L.advance();
-            M.advance();
-        } while(L.cursor != aux);
-
-        list_L.insertionSort();
-        list_M.insertionSort();
-
-        Node<T> cur_L = list_L.head, cur_M = list_M.head;
-        while(cur_L != null && cur_M != null){
-            if(cur_L.getElement().compareTo(cur_M.getElement()) != 0) return false;
-
-            cur_L = cur_L.getNext();
-            cur_M = cur_M.getNext();
         }
-
-        return true;
+        return false;
     }
 
     /**
