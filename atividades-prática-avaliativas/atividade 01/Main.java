@@ -44,19 +44,23 @@ public class Main{
 
     /** lê e retorna um CPF */
     public static String readCpf(){
-        System.err.println("CPF: ");
-        String n = readData("^(\\d{11}|\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})$");
+        System.out.println("CPF: ");
+        String n = readData("^((\\d{11})|(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}))$");
         return n;
     }
 
     /** lê e retorna um telefone */
     public static String readPhone(){
-        return "";
+        System.out.println("Telefome: ");
+        String n = readData("^(\\d{2}) \\d{4}-?\\d{4}$");
+        return n;
     }
 
     /** lê e retorna um email */
     public static String readEmail(){
-        return "";
+        System.out.println("Email: ");
+        String n = readData("^[\\w.-]+@[\\w.-]+.[a-zA-Z]{2,}$");
+        return n;
     }
 
     /** lê e retorna uma idade */
@@ -79,8 +83,10 @@ public class Main{
 
         c.setName(readName());
         c.setAge(readAge());
+        s.nextLine();
         c.setCPF(readCpf());
-        
+        c.setPhone(readPhone());
+        c.setEmail(readEmail());
 
         return c;
     }
@@ -97,7 +103,19 @@ public class Main{
 
             option = s.nextInt();
             s.nextLine();
-            if(option == 0) break;
+            if(option == 0){
+                if(contacts.size() == 0) break;
+                file.criarSaida();
+                DNode<Contact> c = contacts.getFirst();
+
+                while(c != null){
+                    if(c.getElement() != null) file.escreverContato(c.getElement());
+                    c = c.getNext();
+                }
+
+                file.close();
+                break;
+            }
 
             switch(option){
                 case 1: {
@@ -138,7 +156,7 @@ public class Main{
                 case 9:
                     DList.printInv(contacts);
                     break;
-                case 10:
+                case 10:{
 
                     Contact c;
                     file.criarEntrada();
@@ -149,8 +167,8 @@ public class Main{
 
                     System.out.println("Lista de contatos carregada!");
                     break;
+                }
                 default:
-                    file.criarSaida();
                     System.out.println("Opção inválida!");
             }
 
