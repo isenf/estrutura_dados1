@@ -190,10 +190,12 @@ public class DList<T extends Comparable<T>> {
         while(cur != tail){
             if(cur.getElement().compareTo(n.getElement()) > 0){
                 addBefore(cur, n);
-                break;
+                return;
             }
             cur = cur.getNext();
         }
+
+        addBefore(this.tail, n);
     }
 
     /**
