@@ -287,6 +287,30 @@ public class DList<T extends Comparable<T>> {
 
     }
 
+    /** recebe um nome de contato e modifica para um novo nome */
+    public static void modifyName(DList<Contact> L, String name, String newName){
+        DNode<Contact> cur = L.getFirst();
+        while(cur != L.getLast()){
+            if(cur.getElement().getName().equals(name)){
+                cur.getElement().setName(newName);
+            }
+            cur = cur.getNext();
+        }
+    }
+
+    /** remove um nodo se ele tem o mesmo cpf informado */
+    public static boolean removeByCpf(DList<Contact> L, String cpf){
+        DNode<Contact> cur = L.getFirst();
+        while(cur != L.getLast()){
+            if(cur.getElement().getCPF().compareTo(cpf) == 0){
+                L.remove(cur);
+                return true;
+            }
+            cur = cur.getNext();
+        }
+        return false;
+    }
+
     /**
      * Indica se o nodo indicado possui um antecessor
      */
