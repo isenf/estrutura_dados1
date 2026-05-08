@@ -60,7 +60,7 @@ public class ContactList extends DList<Contact>{
 
         while(cur != this.tail){
             if(cur.getElement().getName().equals(n)){
-                L.addLast(cur);
+                L.addLast(new DNode<>(cur.getElement(), null, null));
             }
 
             cur = cur.getNext();
