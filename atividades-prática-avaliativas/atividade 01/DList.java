@@ -9,8 +9,8 @@ public class DList<T extends Comparable<T>> {
      */
     public DList() {
         size = 0;
-        header = new DNode<T>(null, null, null); // cria o cabecalho 
-        tail = new DNode<T>(null, null, null); //cria o final 
+        header = new DNode<>(null, null, null); // cria o cabecalho 
+        tail = new DNode<>(null, null, null); //cria o final 
         header.setNext(tail); // faz o cabecalho e o final apontarem um para o outro
         tail.setPrev(header);
     }
@@ -177,7 +177,7 @@ public class DList<T extends Comparable<T>> {
     }
 
     /**
-     * insere ordenado pelo nome
+     * insere ordenado pelo nome (aplicável a tipos genéricos)
      */
     public void insertSorted(DNode<T> n){
         if(size == 0){
@@ -194,121 +194,6 @@ public class DList<T extends Comparable<T>> {
             }
             cur = cur.getNext();
         }
-    }
-
-    /** ordena a lista de contatos pelo nome */
-    public static void sortByName(DList<Contact> L){
-        if(L.size <= 1) return;
-    
-        DNode<Contact> cur = L.getFirst();
-        DNode<Contact> ins, pivot;
-
-        while(L.getLast() != cur){
-            pivot = cur.getNext();
-            L.remove(pivot);
-            ins = cur;
-
-            while(L.hasPrev(ins) && ins.getElement().getName().compareTo(pivot.getElement().getName()) > 0){
-                ins = ins.getPrev();
-            }
-
-            L.addAfter(ins, pivot);
-
-            if(ins == cur){
-                cur = cur.getNext();
-            }
-
-        }
-    }
-
-    /** ordena a lista de contatos pela idade em ordem crescente */
-    public static void sortByAge(DList<Contact> L){
-        if(L.size() <= 1) return;
-
-        DNode<Contact> cur = L.getFirst();
-        DNode<Contact> pivot, ins;
-
-        while(cur != L.getLast()){
-            pivot = cur.getNext();
-            L.remove(pivot);
-            ins = cur;
-
-            while(L.hasPrev(ins) && ins.getElement().getAge() > pivot.getElement().getAge()){
-                ins = ins.getPrev();
-            }
-
-            L.addAfter(ins, pivot);
-
-            if(ins == cur) cur = cur.getNext();
-
-        }
-
-    }
-
-    /** consulta na lista de contatos usando o nome
-     * 
-     * @param n nome a ser consultado 
-     */
-    public DList<Contact> findByName(String n){
-        DList<Contact> L = new DList<>();
-        DNode<Contact> cur = (DNode<Contact>) this.getFirst();
-
-        while(cur != this.tail){
-            if(cur.getElement().getName().equals(n)){
-                L.addLast(cur);
-            }
-
-            cur = cur.getNext();
-        }
-
-        return L;
-
-    }
-
-    /** imprime do cabeçalho até a cauda */
-    public static void print(DList<Contact> L){
-        DNode<Contact> cur = L.getFirst();
-
-        while(cur != L.tail){
-            System.out.println(cur.getElement());
-            cur = cur.getNext();
-        }
-
-    }
-
-    /** imprime da cauda até o cabeçalho */
-    public static void printInv(DList<Contact> L){
-        DNode<Contact> cur = L.getLast();
-
-        while(cur != L.header){
-            System.out.println(cur.getElement());
-            cur = cur.getPrev();
-        }
-
-    }
-
-    /** recebe um nome de contato e modifica para um novo nome */
-    public static void modifyName(DList<Contact> L, String name, String newName){
-        DNode<Contact> cur = L.getFirst();
-        while(cur != L.getLast()){
-            if(cur.getElement().getName().equals(name)){
-                cur.getElement().setName(newName);
-            }
-            cur = cur.getNext();
-        }
-    }
-
-    /** remove um nodo se ele tem o mesmo cpf informado */
-    public static boolean removeByCpf(DList<Contact> L, String cpf){
-        DNode<Contact> cur = L.getFirst();
-        while(cur != L.getLast()){
-            if(cur.getElement().getCPF().compareTo(cpf) == 0){
-                L.remove(cur);
-                return true;
-            }
-            cur = cur.getNext();
-        }
-        return false;
     }
 
     /**
@@ -328,14 +213,15 @@ public class DList<T extends Comparable<T>> {
     /**
      * Retorna uma representação string da lista
      */
+    @Override
     public String toString() {
         String s = "[";
-        DNode<T> v = header.getNext();
+        DNode v = header.getNext();
         while (v != tail) {
             s += v.getElement();
             v = v.getNext();
             if (v != tail) {
-                s += ",\n";
+                s += ",";
             }
         }
         s += "]";
