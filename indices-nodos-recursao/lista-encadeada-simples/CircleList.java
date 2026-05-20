@@ -27,13 +27,6 @@ public class CircleList<T extends Comparable<T>> {
     }
 
     /**
-     * retorna o tamanho
-     */
-    public int getSize(){
-        return size;
-    }
-
-    /**
      * Move o cursor adiante
      */
     public void advance() {
@@ -78,30 +71,30 @@ public class CircleList<T extends Comparable<T>> {
      *  
      * @return true, se são iguais. false caso contrário.
      */
-    public static <T extends Comparable<T>> boolean isEqual(CircleList<T> L, CircleList<T> M){
-        if(M.getSize() != L.getSize()) return false;
+    public static <T extends Comparable<T>> boolean isEqualContent(CircleList<T> L, CircleList<T> M){
+        Node<T> nodeL = L.getCursor();
+        Node<T> nodeM = M.getCursor();
 
-        for(int i = 0; i < L.getSize(); i++){
-            boolean equal = true;
-            
-            for(int j = 0; j < L.getSize(); j++){
-                if(L.getCursor().getElement().compareTo(M.getCursor().getElement()) != 0){
-                    equal = false;
-                    break;
-                }
-                M.advance();
-                L.advance();
-            }
-        
-            if(equal) return true;
-            L.advance();
+        while(nodeM.getNext() != M.getCursor() && !(nodeL.getElement().compareTo(nodeM.getElement()) == 0)){
+            nodeM = nodeM.getNext();
         }
-        return false;
+
+        for(int i = 0; i < M.size(); i++){
+            nodeM = nodeM.getNext();
+            nodeL = nodeL.getNext();
+
+            if(!(nodeL.getElement().compareTo(nodeM.getElement()) == 0)){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
      * Retorna uma representação string da lista, iniciando pelo cursor
      */
+    @Override
     public String toString() {
         if (cursor == null) {
             return "[ ]";
@@ -135,7 +128,7 @@ public class CircleList<T extends Comparable<T>> {
         System.out.println("l1: " + l1);
         System.out.println("l2: " + l2);
 
-        System.out.printf("\nl1 e l2 são iguais? %b", isEqual(l1, l2));
+        System.out.printf("\nl1 e l2 são iguais? %b", isEqualContent(l1, l2));
     }
 
 }
