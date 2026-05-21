@@ -1,5 +1,4 @@
-
-
+/** implementa uma fila com arranjo e índices circulares */
 public class ArrayQueue<T> implements Queue<T>{
 
     protected int f;                            // primeiro elemento
