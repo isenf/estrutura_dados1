@@ -11,6 +11,10 @@ public class Node<T>{
         next = n;
     }
 
+    public Node(){
+        this(null, null);
+    }
+
     /** retorna o elemento do nodo */
     public T getElement(){
         return element;

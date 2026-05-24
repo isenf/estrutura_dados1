@@ -14,6 +14,10 @@ public class DNode <T> {
         next = n;
     }
 
+    public DNode(){
+        this(null, null, null);
+    }
+
     /**
      * Retorna o elemento deste nodo
      */

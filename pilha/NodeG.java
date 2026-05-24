@@ -11,6 +11,10 @@ public class NodeG<T>{
         next = n;
     }
 
+    public NodeG(){
+        this(null, null);
+    }
+
     /** retorna o elemento do nodo */
     public T getElement(){
         return element;
