@@ -78,6 +78,35 @@ public class RecursionExercises{
         return true;
     }
 
+    /** calcula o k-ésimo elemento na sequência de Fibonacci usando recursão binária
+     * 
+     * livro - trecho de código 3.35
+     * 
+     * @param k inteiro não negativo k que representa a posição na sequência
+     * @return k-ésimo elemento da sequência
+     */
+    public static int BinaryFib(int k){
+        if(k <= 1) return k;
+        else return BinaryFib(k - 1) + BinaryFib(k - 2);
+    }
+
+    /** calcula o par (k, k-1) na sequência de Fibonacci utilizando recursão linear
+     * 
+     *  livro - trecho de código 3.36
+     * 
+     * @param k inteiro não negativo k que representa a posição na sequência
+     * @return par (k, k-1)
+     */
+    public static int[] LinearFibonacci(int k){
+        if(k <= 1){
+            return new int[]{k, 0};
+        }
+
+        int[] pair = LinearFibonacci(k-1);
+        return new int[]{pair[0] + pair[1], pair[0]};
+
+    }
+
     /** imprime um arranjo de inteiros
      * 
      * @param A vetor a ser impresso
@@ -106,16 +135,21 @@ public class RecursionExercises{
     public static void main(String[] args){
         int[] A = {12, 6, 7, 5, 2, 4, 9, 0, 1, 11};
         String s = "racecar";
+        int k = 7;
 
         System.out.print("Arranjo: ");
         printArray(A);
+        System.out.println("\nMaior valor do arranjo: " + findMax(A));
         System.out.println("\nColocar os números pares primeiro: ");
         evenFirst(A);
         printArray(A);
 
         System.out.println("\n\nPalavra: " + s + "\nÉ um palíndromo? " + isPalindrome(s));
 
-        System.out.println(findMax(A));
+        System.out.println("\n" + k + "º número da sequência de Fibonacci: " + BinaryFib(k));
+        k+=2;
+        int[] fibPair = LinearFibonacci(k);
+        System.out.println("\n" + (k-1) + "º e " + k + "º elementos da sequencia de Fibonacci: " + fibPair[1] + " e " + fibPair[0]);
 
     }
 }
