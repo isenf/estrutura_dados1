@@ -3,17 +3,16 @@
  * @author Dante Fabro
  */
 public class Task{
-    // procurar um identificador melhor para as variáveis
     protected int id; // identificador da tarefa
     protected int exeTime;  // tempo de execução da tarefa
-    protected final int time; // ======================================================= falta um getter disso daqui ========================================
-    protected int untilComplete;    // quantidade de vezes que ela foi a frente da fila
+    protected final int fullTime; // o tempo inicial da tarefa
+    protected int executions;    // quantidade de vezes que foi executada
 
     public Task(int i, int e, int u){
         this.id = i;
         this.exeTime = e;
-        this.time = e;
-        this.untilComplete = u;
+        this.fullTime = e;
+        this.executions = u;
     }
 
     public int getId(){
@@ -24,8 +23,12 @@ public class Task{
         return this.exeTime;
     }
 
-    public int getUntilComplete(){
-        return this.untilComplete;
+    public int getExecutions(){
+        return this.executions;
+    }
+
+    public int getFullTime(){
+        return this.fullTime;
     }
 
     public void setId(int newId){
@@ -36,13 +39,13 @@ public class Task{
         this.exeTime = newTime;
     }
 
-    public void setUntilComplete(int newValue){
-        this.untilComplete = newValue;
+    public void setExecutions(int newValue){
+        this.executions = newValue;
     }
 
     @Override // melhorar aqui depois
     public String toString(){
-        return "Tarefa " + getId() + ":\nTempo de execução: " + this.time + "\nAté completar: " + getUntilComplete();
+        return "Tarefa " + getId() + ":\nTempo total: " + this.fullTime + "\nExecuções: " + getExecutions();
 
     }
 

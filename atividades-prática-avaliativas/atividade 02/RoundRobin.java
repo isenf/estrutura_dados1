@@ -2,10 +2,9 @@
  * @author Dante Fabro
  */
 public class RoundRobin{
-    // melhorar esses identificadores aqui
     public final int QUANTUM;
-    protected NodeQueue<Task> queueExec;
-    protected NodeQueue<Task> queueEnded;
+    protected NodeQueue<Task> taskQueue;
+    protected NodeQueue<Task> completeQueue;
 
     public RoundRobin(){
         this(5);
@@ -13,36 +12,33 @@ public class RoundRobin{
 
     public RoundRobin(int q){
         this.QUANTUM = q;
-        queueExec = new NodeQueue<>();
-        queueEnded = new NodeQueue<>();
+        taskQueue = new NodeQueue<>();
+        completeQueue = new NodeQueue<>();
     }
 
     public void addTask(Task task){
-        queueExec.enqueue(task);
+        taskQueue.enqueue(task);
     }
 
-    // nome temporário, voltar aqui depois
-    public void removeTask(){
-        Task elem = queueExec.front();
-        if(elem.getExeTime() - QUANTUM >= 0){
-            elem.setExeTime(elem.getExeTime() - QUANTUM);
-            queueExec.enqueue(queueExec.dequeue());
-            queueExec.front().setUntilComplete(queueExec.front().untilComplete + 1);
+    public void executeQuantum(){
+        Task task = taskQueue.front();
+
+        if(task.getExeTime() - QUANTUM >= 0){
+            task.setExeTime(task.getExeTime() - QUANTUM);
+            taskQueue.front().setExecutions(task.executions + 1);
+            taskQueue.enqueue(taskQueue.dequeue());
         } else{
-            queueEnded.enqueue(queueExec.dequeue());
+            taskQueue.front().setExecutions(task.executions + 1);
+            completeQueue.enqueue(taskQueue.dequeue());
         }
     }
 
-    // MUDAR O NOME DEPOIS AAAAAAAA
-    public boolean noTask(){
-        return queueExec.isEmpty();
+    public boolean hasTasks(){
+        return taskQueue.isEmpty();
     }
 
     public void printReport(){
-        System.out.println(this.queueEnded);
+        System.out.println(this.completeQueue);
     }
-
-    public static void main(String[] args) {
-        
-    }
+    
 }
