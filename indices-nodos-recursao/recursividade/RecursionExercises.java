@@ -131,6 +131,61 @@ public class RecursionExercises{
         }
     }
 
+    public static void fillMatrix(int[][] M, int[] a, int i, int j){
+        if(i >= M.length) return;
+
+        if(j < M.length){
+            M[i][j] = a[i * M.length + j];
+            fillMatrix(M, a, i, j + 1);
+            return;
+        }
+
+        fillMatrix(M, a, i + 1, 0);
+    }
+
+    public static int calcProduct(int m, int n){
+        if(n == 0) return 0;
+        return m + calcProduct(m, n-1);
+    }
+
+    public static double convStrInt(String S, int n, int i){
+        if(i >= n-1) return S.charAt(i) - '0';
+        return (Math.pow(10, n-1-i) * ((int) S.charAt(i) - '0')) + convStrInt(S, n, i+1);
+    }
+
+    public static int[] findMinMax(int[] A){
+        return findMinMax(A, new int[]{A[0], A[0]}, 1);
+    }
+
+    private static int[] findMinMax(int[] A, int[] minMax, int i){
+        if(i == A.length) return minMax;
+
+        // para menor valor
+        if(A[i] < minMax[0]) minMax[0] = A[i];
+
+        // para maior valor
+        if(A[i] > minMax[1]) minMax[1] = A[i];
+
+        return findMinMax(A, minMax, i+1);
+    }
+    public static void printMatrix(int [][] M){
+        printMatrix(M, 0, 0);
+    }
+
+    private static void printMatrix(int[][] M, int i, int j){
+        if(i == M.length) return;
+        if(j < M[i].length){
+            System.out.print(M[i][j]);
+
+            if(j < M[i].length-1) System.out.print(", ");
+            
+            printMatrix(M, i, j+1);
+            return;
+        }
+        System.out.println();
+        printMatrix(M, i+1, 0);
+    }
+
     // testa os algoritmos recursivos
     public static void main(String[] args){
         int[] A = {12, 6, 7, 5, 2, 4, 9, 0, 1, 11};
@@ -151,5 +206,23 @@ public class RecursionExercises{
         int[] fibPair = LinearFibonacci(k);
         System.out.println("\n" + (k-1) + "º e " + k + "º elementos da sequencia de Fibonacci: " + fibPair[1] + " e " + fibPair[0]);
 
+        int[] aux = findMinMax(A);
+        System.out.println("\nMenor e maior elemento: " + aux[0] + " e " + aux[1]);
+
+        int[][] M = new int[3][3];
+        A = new int[]{0, 1, 2, 3, 5, 5, 6, 7, 0};
+
+        System.out.println("\nTransforma o arranjo em uma matriz nxn: ");
+        printArray(A);
+        System.out.println();
+        fillMatrix(M, A, 0, 0);
+        printMatrix(M, 0, 0);
+
+        int m = 2, n = 3;
+        System.out.println("\nCalcula o produto de " + m + " e " + n + 
+                            " utilizando recursão e adição e subtração\nProduto: " + calcProduct(m, n));
+
+        s = "13098";
+        System.out.println("\nConverte a string numérica " + s + " em um número: " + (int) convStrInt(s, s.length(), 0));
     }
 }
