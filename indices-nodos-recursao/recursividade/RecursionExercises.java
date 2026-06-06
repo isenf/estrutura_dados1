@@ -131,7 +131,24 @@ public class RecursionExercises{
         }
     }
 
-    public static void fillMatrix(int[][] M, int[] a, int i, int j){
+    /** preenche uma matriz com os elementos de um arranjo dado chamando um método recursivo privado
+     * 
+     * @param M matriz a ser preenchida
+     * @param a arranjo com os elementos para colocar na matriz
+     */
+    public static void fillMatrix(int[][] M, int[] a){
+        fillMatrix(M, a, 0, 0);
+    }
+
+    /** preenche uma matriz com os elementos de um arranjo dado utilizando recursão
+     * 
+     * @param M matriz a ser preenchida
+     * @param a arranjo com os elementos para colocar na matriz
+     * @param i índice da primeira linha da matriz
+     * @param j índice da primeira coluna da matriz 
+     * 
+     */
+    private static void fillMatrix(int[][] M, int[] a, int i, int j){
         if(i >= M.length) return;
 
         if(j < M.length){
@@ -143,20 +160,57 @@ public class RecursionExercises{
         fillMatrix(M, a, i + 1, 0);
     }
 
+    /** calcula o produto recursivamente de dois inteiros utilizando somente soma e subtração
+     * 
+     * @param m primeira parcela de um produto
+     * @param n segunda parcela de um produto
+     * 
+     * @return produto entre m e n
+     */
     public static int calcProduct(int m, int n){
         if(n == 0) return 0;
         return m + calcProduct(m, n-1);
     }
 
-    public static double convStrInt(String S, int n, int i){
-        if(i >= n-1) return S.charAt(i) - '0';
-        return (Math.pow(10, n-1-i) * ((int) S.charAt(i) - '0')) + convStrInt(S, n, i+1);
+    /** converte uma string numérica em um inteiro
+     * 
+     * @param S string a ser convertida
+     * @return inteiro que corresponde à string
+     */
+    public static int convStrInt(String s){
+        return convStrInt(s, s.length(), 0);
     }
 
+    /** converte uma string numérica em um inteiro utilizando recursividade
+     * 
+     * @param S string a ser convertida
+     * @param n quantidade de caracteres na string
+     * @param i índice inicial
+     * 
+     * @return inteiro que corresponde à string
+     */
+    private static int convStrInt(String S, int n, int i){
+        if(i >= n-1) return S.charAt(i) - '0';
+        return ((int) Math.pow(10, n-1-i) * ((int) S.charAt(i) - '0')) + convStrInt(S, n, i+1);
+    }
+
+    /** encontra, respectivamente, o menor e o maior número em um arranjo 
+     * 
+     * @param A arranjo de inteiros com os valores
+     * @return arranjo em que o primeiro número corresponde ao menor número e o segundo ao maior número
+     */
     public static int[] findMinMax(int[] A){
         return findMinMax(A, new int[]{A[0], A[0]}, 1);
     }
 
+    /** encontra, respectivamente, o menor e o maior número em um arranjo utilizando recursividade
+     * 
+     * @param A arranjo de inteiros com os valores
+     * @param minMax arranjo contendo o menor e o maior valor
+     * @param i índice inicial
+     * 
+     * @return arranjo em que o primeiro número corresponde ao menor número e o segundo ao maior número
+     */
     private static int[] findMinMax(int[] A, int[] minMax, int i){
         if(i == A.length) return minMax;
 
@@ -168,10 +222,21 @@ public class RecursionExercises{
 
         return findMinMax(A, minMax, i+1);
     }
+
+    /** imprime uma matriz
+     * 
+     * @param M matriz a ser impressa
+     */
     public static void printMatrix(int [][] M){
         printMatrix(M, 0, 0);
     }
 
+    /** imprime uma matriz utilizando recursividade
+     * 
+     * @param M matriz a ser impressa
+     * @param i índice inicial da linha
+     * @param j índice inicial da coluna
+     */
     private static void printMatrix(int[][] M, int i, int j){
         if(i == M.length) return;
         if(j < M[i].length){
@@ -215,7 +280,7 @@ public class RecursionExercises{
         System.out.println("\nTransforma o arranjo em uma matriz nxn: ");
         printArray(A);
         System.out.println();
-        fillMatrix(M, A, 0, 0);
+        fillMatrix(M, A);
         printMatrix(M, 0, 0);
 
         int m = 2, n = 3;
