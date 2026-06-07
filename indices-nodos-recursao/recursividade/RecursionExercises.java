@@ -4,6 +4,8 @@
  */
 public class RecursionExercises{
 
+    public static final String VOWELS = "AEIOUaeiou";
+
     /** encontra o valor máximo em um arranjo
      * 
      * @param A arranjo de inteiros
@@ -251,6 +253,44 @@ public class RecursionExercises{
         printMatrix(M, i+1, 0);
     }
 
+    /** verifica se uma string tem mais vogais do que consoantes chamando um método privado recursivo
+     * 
+     * @param S string a ser verificada
+     * @return true se tem mais vogais, false caso contrário 
+     */
+    public static boolean moreVowels(String S){
+        return moreVowels(S, 0) > 0;
+    }
+
+    /** verifica se uma string tem mais vogais do que consoantes utilizando recursividade
+     * 
+     * @param S string a ser verificada
+     * @param i índice inicial da string
+     * @param aux arranjo auxiliar que mantém o número de vogais (índice 0) e de consoantes (índice 1)
+     * 
+     * @return true se tem mais vogais, false caso contrário
+     */
+    private static int moreVowels(String S, int i){
+        if(i == S.length()) return 0;
+        
+        int aux = 0;
+        if(Character.isLetter(S.charAt(i))){
+            if(isVowel(S.charAt(i))) aux = 1;
+            else aux = -1;
+        }
+
+        return aux + moreVowels(S, i+1);
+    }
+
+    /** verifica se um caractere é uma vogal ou não
+     * 
+     * @param c caractere a ser verificado
+     * @return true se é um caractere, false caso contrário
+     */
+    public static boolean isVowel(char c){
+        return VOWELS.indexOf(c) != -1;
+    }
+
     // testa os algoritmos recursivos
     public static void main(String[] args){
         int[] A = {12, 6, 7, 5, 2, 4, 9, 0, 1, 11};
@@ -289,5 +329,9 @@ public class RecursionExercises{
 
         s = "13098";
         System.out.println("\nConverte a string numérica " + s + " em um número: " + (int) convStrInt(s, s.length(), 0));
+
+        s = "baanana";
+        System.out.println("\nA string \"" + s + "\" tem mais vogais? " + moreVowels(s));
+
     }
 }
