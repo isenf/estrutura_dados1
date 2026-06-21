@@ -98,6 +98,29 @@ public class LinkedTree<E> implements Tree<E> {
         return vv.getChildren();
     }
 
+    /** adds a new node as a child to an existent parent node 
+     * 
+     * @param element element to be storaged in the new node
+     * @param parent the existing parent node
+     * 
+     * @return the newly created TreePosition
+     */
+    public Position<E> addChild(E element, Position parent){
+        TreePosition<E> parentPos = checkPosition(parent);
+        TreePosition<E> child = createNode(element, parentPos, null);
+
+        PositionList<Position<E>> children = parentPos.getChildren();
+
+        if(children == null){
+            children = new NodePositionList<>();
+        }
+
+        children.addLast(child);
+        parentPos.setChildren(children);
+        
+        return child;
+    }
+
     /**
      * Returns an iterable collection of the tree nodes.
      */
@@ -188,14 +211,11 @@ public class LinkedTree<E> implements Tree<E> {
     protected void preorderPositions(Position<E> v, PositionList<Position<E>> pos)
             throws IllegalArgumentException {
         pos.addLast(v);
-        try{
-            System.out.println(v.getElement());
-            for (Position<E> w : children(v)) {
-                preorderPositions(w, pos);	// recurse on each child
-            }
-        } catch(IllegalArgumentException e){
-            
+        System.out.println(v.getElement());
+
+        if(isExternal(v)) return;
+        for (Position<E> w : children(v)) {
+            preorderPositions(w, pos);	// recurse on each child
         }
-        
     }
 }
