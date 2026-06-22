@@ -121,6 +121,24 @@ public class LinkedTree<E> implements Tree<E> {
         return child;
     }
 
+    /** adds multiple children to a given existing parent node and returns the newly created children
+     * 
+     * @param elements the array of elements to be added as a child
+     * @param parent the existing parent node
+     * 
+     * @return the PositionList of the new children
+     */
+    public PositionList<Position<E>> addChildren(E[] elements, Position<E> parent){
+        PositionList<Position<E>> newChildren = new NodePositionList<>();
+
+        for(E e: elements){
+            Position<E> newChild = addChild(e, parent);
+            newChildren.addLast(newChild);
+        }
+
+        return newChildren;
+    }
+
     /**
      * Returns an iterable collection of the tree nodes.
      */
