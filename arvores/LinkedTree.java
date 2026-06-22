@@ -236,4 +236,25 @@ public class LinkedTree<E> implements Tree<E> {
             preorderPositions(w, pos);	// recurse on each child
         }
     }
+
+    public static<E> String parentheticPreorder(Tree<E> T, Position<E> v, int depth){
+        String s = v.getElement().toString();
+        String indent = "  ".repeat(depth);
+        if(T.isExternal(v)) return s;
+
+        TreePosition<E> vv = (TreePosition) v;
+        boolean firstTime = true;
+        for(Position<E> u: vv.getChildren()){
+            if(firstTime){
+                firstTime = false;
+                s += " (\n";
+            }
+            
+                s += indent + parentheticPreorder(T, u, depth+1) + "\n";
+        }
+
+        s += indent + ")";
+
+        return s;
+    }
 }
