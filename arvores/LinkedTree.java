@@ -237,6 +237,13 @@ public class LinkedTree<E> implements Tree<E> {
         }
     }
 
+    /** trecho de código do livro */
+    public static<E> int depth(Tree<E> T, Position<E> v){
+        if(T.isRoot(v)) return 0;
+
+        return 1 + depth(T, T.parent(v));
+    }
+
     public static<E> String parentheticPreorder(Tree<E> T, Position<E> v, int depth){
         String s = v.getElement().toString();
         String indent = "  ".repeat(depth);
@@ -256,5 +263,40 @@ public class LinkedTree<E> implements Tree<E> {
         s += indent + ")";
 
         return s;
+    }
+
+    public static <E> Position<E> findAncestor(Tree<E> T, Position<E> v, Position<E> w){
+        return findAncestor(T, v, w, depth(T, v), depth(T, w));
+    }
+
+    protected static <E> Position<E> findAncestor(Tree<E> T, Position<E> v, Position<E> w, int depth_v, int depth_w){
+        if(depth_v > depth_w) return findAncestor(T, T.parent(v), w, depth_v - 1, depth_w);
+        else if(depth_v < depth_w) return findAncestor(T, v, T.parent(w), depth_v, depth_w-1);
+
+        if(v != w) return findAncestor(T, T.parent(v), T.parent(w), depth_v-1, depth_w-1);
+        return v;
+    }
+
+    public static <E> Position<E> findAncestorIterative(Tree<E> T, Position<E> v, Position<E> w){
+        return findAncestorIterative(T, v, w, depth(T, v), depth(T, w));
+    }
+
+    protected static <E> Position<E> findAncestorIterative(Tree<E> T, Position<E> v, Position<E> w, int depth_v, int depth_w){
+        while(depth_v > depth_w){
+            v = T.parent(v);
+            depth_v--;
+        }
+
+        while(depth_w > depth_v){
+            w = T.parent(w);
+            depth_w--;
+        }
+
+        while(v != w){
+            v = T.parent(v); depth_v--;
+            w = T.parent(w); depth_w--;
+        }
+
+        return v;
     }
 }
