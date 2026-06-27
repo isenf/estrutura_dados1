@@ -117,6 +117,7 @@ public class LinkedTree<E> implements Tree<E> {
 
         children.addLast(child);
         parentPos.setChildren(children);
+        size++;
         
         return child;
     }
