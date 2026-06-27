@@ -244,6 +244,14 @@ public class LinkedTree<E> implements Tree<E> {
         return 1 + depth(T, T.parent(v));
     }
 
+    /** retorna uma string com uma representação entre parenteses de uma árvore usando percurso preorder
+     * 
+     * @param T árvore a ser percorrida
+     * @param v nodo considerado como raiz da subárvore a ser representada
+     * @param depth profundidade do nodo v da árvore
+     * 
+     * @return string que representa a subárvore enraizada em v
+     */
     public static<E> String parentheticPreorder(Tree<E> T, Position<E> v, int depth){
         String s = v.getElement().toString();
         String indent = "  ".repeat(depth);
@@ -265,10 +273,28 @@ public class LinkedTree<E> implements Tree<E> {
         return s;
     }
 
+    /** procura o ancestral comum mais baixo (Lowest Common Ancestor -LCA) de dois nodos de uma árvore, chamando um método protegido recursivo
+     * 
+     * @param T árvore que contém os nodos v e w
+     * @param v primeiro nodo
+     * @param w segundo nodo
+     * 
+     * @return posição do ancestral comum mais baixo entre v e w
+     */
     public static <E> Position<E> findAncestor(Tree<E> T, Position<E> v, Position<E> w){
         return findAncestor(T, v, w, depth(T, v), depth(T, w));
     }
 
+    /** método protegido e recursivo que procura o ancestral comum mais baixo (Lowest Common Ancestor -LCA) de dois nodos de uma árvore
+     * 
+     * @param T árvore que contém os nodos v e w
+     * @param v primeiro nodo
+     * @param w segundo nodo
+     * @param depth_v profundidade do primeiro nodo
+     * @param depth_w profundidade do segundo nodo
+     * 
+     * @return posição do ancestral comum mais baixo entre v e w
+     */
     protected static <E> Position<E> findAncestor(Tree<E> T, Position<E> v, Position<E> w, int depth_v, int depth_w){
         if(depth_v > depth_w) return findAncestor(T, T.parent(v), w, depth_v - 1, depth_w);
         else if(depth_v < depth_w) return findAncestor(T, v, T.parent(w), depth_v, depth_w-1);
@@ -277,10 +303,28 @@ public class LinkedTree<E> implements Tree<E> {
         return v;
     }
 
+    /** procura o ancestral comum mais baixo (Lowest Common Ancestor -LCA) de dois nodos de uma árvore, chamando um método protegido iterativo
+     * 
+     * @param T árvore que contém os nodos v e w
+     * @param v primeiro nodo
+     * @param w segundo nodo
+     * 
+     * @return posição do ancestral comum mais baixo entre v e w
+     */
     public static <E> Position<E> findAncestorIterative(Tree<E> T, Position<E> v, Position<E> w){
         return findAncestorIterative(T, v, w, depth(T, v), depth(T, w));
     }
 
+    /** método protegido e iterativo que procura o ancestral comum mais baixo (Lowest Common Ancestor -LCA) de dois nodos de uma árvore
+     * 
+     * @param T árvore que contém os nodos v e w
+     * @param v primeiro nodo
+     * @param w segundo nodo
+     * @param depth_v profundidade do primeiro nodo
+     * @param depth_w profundidade do segundo nodo
+     * 
+     * @return posição do ancestral comum mais baixo entre v e w
+     */
     protected static <E> Position<E> findAncestorIterative(Tree<E> T, Position<E> v, Position<E> w, int depth_v, int depth_w){
         while(depth_v > depth_w){
             v = T.parent(v);
