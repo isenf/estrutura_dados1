@@ -237,11 +237,63 @@ public class LinkedTree<E> implements Tree<E> {
         }
     }
 
-    /** trecho de código do livro */
+    /** computa a profundidade de um nodo v em uma árvore T 
+     * trecho de código 7.3
+     */
     public static<E> int depth(Tree<E> T, Position<E> v){
         if(T.isRoot(v)) return 0;
 
         return 1 + depth(T, T.parent(v));
+    }
+
+    /** computa a altura de uma árvore
+     * 
+     * trecho de código 7.5 
+     */
+    public static <E> int height1(Tree<E> T){        
+        int h = 0;
+        for(Position<E> v: T.positions()){
+            h = Math.max(h, depth(T, v));
+        }
+
+        return h;
+    }
+
+    /** computa a altura de uma árvore
+     * 
+     * trecho de código 7.7
+     */
+    public static <E> int height2(Tree<E> T, Position<E> v){
+        if(T.isExternal(v)) return 0;
+
+        int h = 0;
+        for(Position<E> w: T.children(v))
+            h = Math.max(h, height2(T, w));
+
+        return 1 + h;
+    }
+
+    /** retorna uma string com o percurso preorder dos elementos na subárvore do nodo v de T */
+    public static <E> String toStringPreorder(Tree<E> T, Position<E> v){
+        String s = v.getElement().toString();
+
+        if(T.isExternal(v)) return s;
+        for(Position<E> w: T.children(v))
+            s += ", " + toStringPreorder(T, w);
+        
+        return s;
+    }
+
+    public static <E> String toStringPostorder(Tree<E> T, Position<E> v){
+        String s = "";
+
+        if(T.isInternal(v)){
+            for(Position<E> w: T.children(v))
+                s += toStringPostorder(T, w) + ", ";
+        }
+        
+        s += v.getElement();
+        return s;
     }
 
     /** retorna uma string com uma representação entre parenteses de uma árvore usando percurso preorder
