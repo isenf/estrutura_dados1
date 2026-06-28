@@ -1,4 +1,7 @@
 public class ParenMatch{
+    public static String opening = "([{";
+    public static String closing = ")]}";
+
     /** retorna se a uma expressão contendo parenteses está correta ou não
      * 
      * @param X uma string com a expressão
@@ -7,7 +10,8 @@ public class ParenMatch{
      * @return true se está correta, false caso contrário
      * 
      */
-    public static boolean validate(String X, int n){
+    public static boolean validate(String X){
+        int n = X.length();
         NodeStack<Character> S = new NodeStack<>();
 
         for(int i = 0; i < n; i++){
@@ -28,28 +32,27 @@ public class ParenMatch{
 
     /** verifica se é um símbolo de abertura */
     public static boolean isOpening(char p){
-        return (p == '(') || (p == '[') || (p == '{');
+        return opening.indexOf(p) != -1;
     }
 
     /** verifica se é um símbolo de fechamento */
     public static boolean isClosing(char p){
-        return (p == ')') || (p == ']') || (p == '}');
+        return closing.indexOf(p) != -1;
     }
 
     /** verifica se dois caracteres correspondem entre si */
     public static boolean isMatching(char o, char c){
-        return ((o == '(') && (c == ')') ||
-                (o == '[') && (c == ']') ||
-                (o == '{') && (c == '}'));
+        return opening.indexOf(o) == closing.indexOf(c);
     }
 
     public static void main(String[] args){
-        String exp1 = ")(abc){((def))[]}", exp2 = "{([...])(([ghi]))}", exp3 = "(.", exp4 = "({[])}";
+        String exp1 = ")(abc){((def))[]}", exp2 = "{([...])(([ghi]))}", exp3 = "(.", exp4 = "({[])}", exp5 = "(({})([]{[]}))";
 
-        System.out.println(exp1 + " -> " + validate(exp1, exp1.length()));
-        System.out.println(exp2 + " -> " + validate(exp2, exp2.length()));
-        System.out.println(exp3 + " -> " + validate(exp3, exp3.length()));
-        System.out.println(exp4 + " -> " + validate(exp4, exp4.length()));
+        System.out.println(exp1 + " -> " + validate(exp1));
+        System.out.println(exp2 + " -> " + validate(exp2));
+        System.out.println(exp3 + " -> " + validate(exp3));
+        System.out.println(exp4 + " -> " + validate(exp4));
+        System.out.println(exp5 + " -> " + validate(exp5));
 
     }
 }
