@@ -38,6 +38,50 @@ public class ExpressionTree{
         
     }
 
+    private boolean hasOperator(String s){
+        for(char c: s.toCharArray()){
+            if(isOperator(c)) return true;
+        }
+
+        return false;
+    }
+
+    private boolean isValidExpression(String e){
+        String exp = e.replace("\\s+", "");
+
+        if(exp == null || e.isEmpty()) return false;
+        
+        if(!ParenMatch.validate(exp)) return false;
+
+        while(exp.startsWith("(") && exp.endsWith(")")){
+            exp = exp.substring(1, exp.length() -1);
+        }
+
+        if(isNumber(exp)) return true;
+
+        if(!hasOperator(exp) || !validateOperators(exp)) return false;
+
+        return true;
+    }
+
+    private boolean validateOperators(String e){
+        for(int i = 0; i < e.length() -1; i++){
+            char c = e.charAt(i);
+
+            if(!isOperator(c)) continue;
+
+            if(i == 0 || i == e.length()-1) return false;
+            if(!(isNumber(String.valueOf(e.charAt(i-1))) || e.charAt(i-1) ==  ')')) return false;
+            if(!(isNumber(String.valueOf(e.charAt(i+1))) || e.charAt(i+1) ==  '(')) return false;
+        }
+
+        return true;
+    }
+
+
+
+
+    // métodos auxiliares
     /** encontra o operador principal considerando os parenteses */
     public int findMainOperator(String e){
         int count = 0, index = -1;
@@ -56,25 +100,16 @@ public class ExpressionTree{
         return index;
     }
 
+    // métodos para construir a árvore
     /** tenta construir a árvore
      * 
      * @return true se é possível construir a árvore, false caso contrário
      */
     public boolean build(){
-        if(this.expression == null || this.expression.length() == 0){
-            System.out.println("Expressão vazia");
-            return false;
-        }
+        if(this.expression == null || this.expression.isEmpty()) return false;
+        if(!isValidExpression(this.expression)) return false;
 
-        String exp = this.expression.replaceAll("\\s+", "");
-        if(!ParenMatch.validate(this.expression)){
-            System.out.println("Parenteses desbalanceados");
-            return false;
-        }
-
-        if(isNumber(this.expression)){
-            return true;
-        }
+        String exp = this.expression.replace("\\s+", "");
 
         try{
             this.root = buildRecursive(exp, null, true);
@@ -127,11 +162,14 @@ public class ExpressionTree{
     }
 
 
+    // testes dos métodos
     public static void main(String[] args){
-        ExpressionTree exp = new ExpressionTree("(5-1)+2/");
+        ExpressionTree exp = new ExpressionTree("(5-1)+(2*(5+1))");
         System.out.println(exp.isOperator('+'));
         System.out.println(exp.isNumber("6.7"));
         System.out.println(exp.build());
+
+        
     }
 
 }
