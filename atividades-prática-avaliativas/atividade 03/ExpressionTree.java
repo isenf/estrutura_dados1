@@ -13,7 +13,7 @@ public class ExpressionTree{
     }
 
     public ExpressionTree(String e){
-        this.expression = e.replace("\\s+", "");
+        this.expression = e.replaceAll("\\s+", "");
         this.root = null;
     }
 
@@ -132,7 +132,7 @@ public class ExpressionTree{
     private ExpressionOperator createOperator(char operator){
         switch (operator) {
             case '+':
-                return new AdittionOperator();
+                return new AddittionOperator();
             
             case '-':
                 return new SubtractionOperator();
@@ -148,6 +148,25 @@ public class ExpressionTree{
         }
     }
 
+    /** método que retorna o resultado da expressão aritmética */
+    public Integer evaluate(){
+        return root.getValue();
+    }
+
+    /** realza o percurso inorder para retornar a expressão */
+    public String stringExpression(ExpressionTerm term){
+        if(term == null) return "";
+
+        if(term instanceof ExpressionVariable) return term.toString();
+
+        String s = "";
+        ExpressionOperator operator = (ExpressionOperator) term;
+        s += "(" + stringExpression(operator.firstOperand);
+        s += operator.toString();
+        s += stringExpression(operator.secondOperand) + ")";
+
+        return s;
+    }
     
 
     // testes dos métodos
@@ -157,6 +176,8 @@ public class ExpressionTree{
 
         ExpressionTree exp = new ExpressionTree(strExp);
         exp.build();
+        System.out.println(exp.evaluate());
+        System.out.println(exp.stringExpression(exp.root));
     }
 
 }
