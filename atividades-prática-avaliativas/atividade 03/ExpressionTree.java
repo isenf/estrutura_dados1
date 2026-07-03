@@ -1,4 +1,5 @@
 /**
+ * 
  * @author Dante Fabro
  */
 public class ExpressionTree{
@@ -24,16 +25,16 @@ public class ExpressionTree{
         return OPERATORS.indexOf(c) != -1;
     }
 
-    private boolean hasOperator(String s){
-        for(char c: s.toCharArray()){
+    private boolean hasOperator(String exp){
+        for(char c: exp.toCharArray()){
             if(isOperator(c)) return true;
         }
 
         return false;
     }
 
-    private boolean hasValidCharacters(String s){
-        for(char c: s.toCharArray()){
+    private boolean hasValidCharacters(String exp){
+        for(char c: exp.toCharArray()){
             if(!Character.isDigit(c) && !isOperator(c) && !ParenMatch.isOpening(c) && !ParenMatch.isClosing(c)){
                 System.out.println("invalido -> " + c);
                 return false;
@@ -44,10 +45,38 @@ public class ExpressionTree{
         return true;
     }
 
+    /** verifica a posição dos operadores em uma árvore */
+    private boolean hasValidOperators(String exp){
+        for(int i = 0; i < exp.length() - 1; i++){
+            char c = exp.charAt(i);
+            char next = exp.charAt(i+1);
+
+            if(isOperator(c) && isOperator(next)){
+                System.out.println("erro: dois operadores consecultivos");
+                return false;
+            }
+
+            if(ParenMatch.isOpening(c) && isOperator(next)){
+                System.out.println("erro: parenteses seguido de número");
+                return false;
+            }
+
+            if(ParenMatch.isClosing(next) && isOperator(c)){
+                System.out.println("erro: número seguido de parenteses");
+                return false;
+            }
+
+    
+        }
+
+        return true;
+    }
+
     private boolean hasBalancedParen(String expression){
         return ParenMatch.validate(expression);
     }
 
+    /** verifica uma expressão */
     private boolean verifyExpression(String expression){
         expression = expression.replaceAll("\\s+", "");
 
@@ -63,6 +92,10 @@ public class ExpressionTree{
 
         if(!hasValidCharacters(expression)){
             System.out.println("erro: caracteres inválidos na expressão");
+            return false;
+        }
+
+        if(!hasValidOperators(expression)){
             return false;
         }
 
@@ -103,14 +136,14 @@ public class ExpressionTree{
     private ExpressionTerm buildRecursive(String expression){
 
         if(!expression.startsWith("(")){
-            return new ExpressionVariable(Integer.parseInt(expression));
+            return new ExpressionVariable(Double.parseDouble(expression));
         }
 
         expression = expression.substring(1, expression.length()-1);
         int operatorIdx = findMainOperator(expression);
 
         if(operatorIdx == -1){
-            return new ExpressionVariable(Integer.parseInt(expression));
+            return new ExpressionVariable(Double.parseDouble(expression));
         }
 
         String leftExp = expression.substring(0, operatorIdx).replaceAll("\\s+", "");
@@ -149,11 +182,13 @@ public class ExpressionTree{
     }
 
     /** método que retorna o resultado da expressão aritmética */
-    public Integer evaluate(){
+    public Double evaluate(){
         return root.getValue();
     }
 
-    /** realza o percurso inorder para retornar a expressão */
+    /** realza o percurso inorder para retornar a expressão 
+     * meio inutil kkkkk
+     */
     public String stringExpression(ExpressionTerm term){
         if(term == null) return "";
 
@@ -170,13 +205,13 @@ public class ExpressionTree{
     
 
     // testes dos métodos
-    // problemas para verificar: entre parenteses precisa ter algo e sinal sem número antes
     public static void main(String[] args){
-        String strExp = "((5-1)*(2*(6/2)))";
+        String strExp = "((5--1)*(2*(6/2)))";
 
         ExpressionTree exp = new ExpressionTree(strExp);
         exp.build();
         System.out.println(exp.evaluate());
+        System.out.println(exp.verifyExpression(exp.expression));
         System.out.println(exp.stringExpression(exp.root));
     }
 
