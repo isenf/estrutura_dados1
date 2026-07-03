@@ -4,8 +4,8 @@
  * Livro - Trecho de Código 7.30 (inspiração)
  */
 public class SubtractionOperator extends ExpressionOperator {
-    public Integer getValue(){
-        return firstOperand - secondOperand;
+    public Double getValue(){
+        return (firstOperand.getValue() - secondOperand.getValue());
     }
 
     public String toString(){
