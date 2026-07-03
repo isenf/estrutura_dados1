@@ -2,20 +2,17 @@
  * @author Dante Fabro
  */
 public class ExpressionTree{
-    private LinkedBinaryTree<String> tree;
-    private Position<String> root;
-    private String expression;
+    protected ExpressionTerm root;
+    protected String expression;
     public static final String OPERATORS = "+-*/";
 
     // construtores
     public ExpressionTree(){
-        this.tree = new LinkedBinaryTree<>();
         this.root = null;
         this.expression = "";
     }
 
     public ExpressionTree(String e){
-        this.tree = new LinkedBinaryTree<>();
         this.expression = e.replace("\\s+", "");
         this.root = null;
     }
@@ -27,17 +24,6 @@ public class ExpressionTree{
         return OPERATORS.indexOf(c) != -1;
     }
 
-    /** verifica se uma string pode ser convertida para número */
-    public boolean isNumber(String s){
-        try {
-            Double.parseDouble(s);
-            return true;
-        } catch(Exception e){
-            return false;
-        }
-        
-    }
-
     private boolean hasOperator(String s){
         for(char c: s.toCharArray()){
             if(isOperator(c)) return true;
@@ -46,40 +32,43 @@ public class ExpressionTree{
         return false;
     }
 
-    private boolean isValidExpression(String e){
-        String exp = e.replace("\\s+", "");
+    private boolean hasValidCharacters(String s){
+        for(char c: s.toCharArray()){
+            if(!Character.isDigit(c) && !isOperator(c) && !ParenMatch.isOpening(c) && !ParenMatch.isClosing(c)){
+                System.out.println("invalido -> " + c);
+                return false;
 
-        if(exp == null || e.isEmpty()) return false;
-        
-        if(!ParenMatch.validate(exp)) return false;
-
-        while(exp.startsWith("(") && exp.endsWith(")")){
-            exp = exp.substring(1, exp.length() -1);
-        }
-
-        if(isNumber(exp)) return true;
-
-        if(!hasOperator(exp) || !validateOperators(exp)) return false;
-
-        return true;
-    }
-
-    private boolean validateOperators(String e){
-        for(int i = 0; i < e.length() -1; i++){
-            char c = e.charAt(i);
-
-            if(!isOperator(c)) continue;
-
-            if(i == 0 || i == e.length()-1) return false;
-            if(!(isNumber(String.valueOf(e.charAt(i-1))) || e.charAt(i-1) ==  ')')) return false;
-            if(!(isNumber(String.valueOf(e.charAt(i+1))) || e.charAt(i+1) ==  '(')) return false;
+            } 
         }
 
         return true;
     }
 
+    private boolean hasBalancedParen(String expression){
+        return ParenMatch.validate(expression);
+    }
 
+    private boolean verifyExpression(String expression){
+        expression = expression.replaceAll("\\s+", "");
 
+        if(expression == null || expression.isEmpty()){
+            System.out.println("erro: expressão vazia");
+            return false;
+        }
+
+        if(!hasBalancedParen(expression)){
+            System.out.println("erro: parenteses desbalanceados");
+            return false;
+        }
+
+        if(!hasValidCharacters(expression)){
+            System.out.println("erro: caracteres inválidos na expressão");
+            return false;
+        }
+
+        return true;
+
+    }
 
     // métodos auxiliares
     /** encontra o operador principal considerando os parenteses */
@@ -89,87 +78,85 @@ public class ExpressionTree{
         for(int i = 0; i < e.length(); i++){
             char c = e.charAt(i);
 
-            if(count == 0 && isOperator(c)){
-                index = i;
-                break;
-            }
             if(ParenMatch.isOpening(c)) count++;
             else if(ParenMatch.isClosing(c)) count--;
+            else if(count == 0 && isOperator(c)){
+                return i;
+            }
         }
-
-        return index;
+        return -1;
     }
 
     // métodos para construir a árvore
-    /** tenta construir a árvore
-     * 
-     * @return true se é possível construir a árvore, false caso contrário
+    /** 
+     * tenta construir a árvore
      */
-    public boolean build(){
-        if(this.expression == null || this.expression.isEmpty()) return false;
-        if(!isValidExpression(this.expression)) return false;
-
-        String exp = this.expression.replace("\\s+", "");
-
-        try{
-            this.root = buildRecursive(exp, null, true);
-        } catch(Exception e){
-            System.out.println("AAAAAAAAAAAA" + e);
-            return false;
+    public void build() throws IllegalArgumentException{
+        if(!verifyExpression(expression)){
+            throw new IllegalArgumentException("expressão inválida");
         }
 
-        return true;
+        this.root = buildRecursive(expression.replaceAll("\\s+", ""));
     }
 
-    private Position<String> buildRecursive(String expression, Position<String> parent, boolean isLeft){
-        if(expression.startsWith("(") && expression.endsWith(")")) expression = expression.substring(1, expression.length()-1);
+    /** */
+    private ExpressionTerm buildRecursive(String expression){
 
+        if(!expression.startsWith("(")){
+            return new ExpressionVariable(Integer.parseInt(expression));
+        }
+
+        expression = expression.substring(1, expression.length()-1);
         int operatorIdx = findMainOperator(expression);
 
-        if(isNumber(expression) || operatorIdx == -1){   // caso base -> número (é nó folha ou raiz, se árvore contém apenas o número)
-            if(parent == null){
-                return tree.addRoot(expression);
-            } 
-            else{
-                if(isLeft)
-                    return tree.insertLeft(parent, expression);
-                
-                return tree.insertRight(parent, expression);
-            }
-
+        if(operatorIdx == -1){
+            return new ExpressionVariable(Integer.parseInt(expression));
         }
 
         String leftExp = expression.substring(0, operatorIdx).replaceAll("\\s+", "");
         String rightExp = expression.substring(operatorIdx + 1).replaceAll("\\s+", "");
-        String operator = String.valueOf(expression.charAt(operatorIdx));
+        Character operatorVal = expression.charAt(operatorIdx);
 
-        Position<String> node;
+        ExpressionOperator operator = createOperator(operatorVal);
 
-        if(parent == null){
-            node = tree.addRoot(operator);
-        } 
-        else{
-            if(isLeft)
-                node = tree.insertLeft(parent, operator);
-            else
-                node = tree.insertRight(parent, operator);
-        }
+        ExpressionTerm left = buildRecursive(leftExp);
+        ExpressionTerm right = buildRecursive(rightExp);
 
-        buildRecursive(leftExp, node, true);
-        buildRecursive(rightExp, node, false);
-        return node;
+        operator.setOperands(left, right);
+
+        return operator;
 
     }
 
+    /** retorna um ExpressionOperator com base no caractere do operador */
+    private ExpressionOperator createOperator(char operator){
+        switch (operator) {
+            case '+':
+                return new AdittionOperator();
+            
+            case '-':
+                return new SubtractionOperator();
+
+            case '*':
+                return new MultiplicationOperator();
+
+            case '/':
+                return new DivisionOperator();
+        
+            default:
+                throw new IllegalArgumentException("operador inválido");
+        }
+    }
+
+    
 
     // testes dos métodos
+    // problemas para verificar: entre parenteses precisa ter algo e sinal sem número antes
     public static void main(String[] args){
-        ExpressionTree exp = new ExpressionTree("(5-1)+(2*(5+1))");
-        System.out.println(exp.isOperator('+'));
-        System.out.println(exp.isNumber("6.7"));
-        System.out.println(exp.build());
+        String strExp = "((5-1)*(2*(6/2)))";
 
-        
+        ExpressionTree exp = new ExpressionTree(strExp);
+        exp.build();
     }
 
 }
