@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 
  * @author Dante Fabro
@@ -6,6 +10,8 @@ public class ExpressionTree{
     protected ExpressionTerm root;
     protected String expression;
     public static final String OPERATORS = "+-*/";
+
+    private int count = 0;
 
     // construtores
     public ExpressionTree(){
@@ -18,25 +24,26 @@ public class ExpressionTree{
         this.root = null;
     }
 
+    // setters
+    public void setExpression(String exp){
+        this.expression = exp;
+    }
+
     // métodos de verificação
+
+    public boolean isEmpty(){
+        return this.root == null;
+    }
 
     /** verifica se um caractere é um operador ou não */
     public boolean isOperator(char c){
         return OPERATORS.indexOf(c) != -1;
     }
 
-    private boolean hasOperator(String exp){
-        for(char c: exp.toCharArray()){
-            if(isOperator(c)) return true;
-        }
-
-        return false;
-    }
-
     private boolean hasValidCharacters(String exp){
         for(char c: exp.toCharArray()){
-            if(!Character.isDigit(c) && !isOperator(c) && !ParenMatch.isOpening(c) && !ParenMatch.isClosing(c)){
-                System.out.println("invalido -> " + c);
+            if(!Character.isDigit(c) && !isOperator(c) && !ParenMatch.isOpening(c) && !ParenMatch.isClosing(c) && c != '.'){
+                System.out.println("inválido -> " + c);
                 return false;
 
             } 
@@ -124,12 +131,13 @@ public class ExpressionTree{
     /** 
      * tenta construir a árvore
      */
-    public void build() throws IllegalArgumentException{
+    public boolean build() throws IllegalArgumentException{
         if(!verifyExpression(expression)){
             throw new IllegalArgumentException("expressão inválida");
         }
 
         this.root = buildRecursive(expression.replaceAll("\\s+", ""));
+        return true;
     }
 
     /** */
@@ -186,33 +194,70 @@ public class ExpressionTree{
         return root.getValue();
     }
 
-    /** realza o percurso inorder para retornar a expressão 
-     * meio inutil kkkkk
-     */
-    public String stringExpression(ExpressionTerm term){
-        if(term == null) return "";
-
-        if(term instanceof ExpressionVariable) return term.toString();
-
-        String s = "";
-        ExpressionOperator operator = (ExpressionOperator) term;
-        s += "(" + stringExpression(operator.firstOperand);
-        s += operator.toString();
-        s += stringExpression(operator.secondOperand) + ")";
-
-        return s;
-    }
+    // métodos para desenhar a árvore
     
+    public void draw(){
+        if(root == null) return;
+
+        int spaces = 4;
+
+        List<NodeInfo> nodes = new ArrayList<>();
+        calcPositions(root, nodes, 0);
+
+        int maxX = 0, maxY = 0;
+
+        for(NodeInfo node: nodes){
+            if(node.getX() > maxX) maxX = node.getX();
+            if(node.getY() > maxY) maxY = node.getY();
+        }
+
+        char[][] grid = new char[maxY + 1][(maxX+1) * spaces];
+
+        for(char[] row: grid) Arrays.fill(row, ' ');
+        for(NodeInfo node: nodes){
+            String val = node.getValue();
+            int x = node.getX() * spaces;
+            int y = node.getY();
+
+            for(int i = 0; (i < val.length()) && (x + i < grid[y].length); i++){
+                grid[y][x+i] = val.charAt(i);
+            }
+        }
+
+        System.out.println();
+        for(char[] row: grid){
+            System.out.println(new String(row));
+        }
+
+    }
+
+    private void calcPositions(ExpressionTerm term, List<NodeInfo> nodes, int depth){
+        if(term == null) return;
+
+        if(term instanceof ExpressionVariable){
+            nodes.add(new NodeInfo(term, count++, depth));
+            // System.out.println(": " + term.toString());
+        } else{
+            ExpressionOperator op = (ExpressionOperator) term;
+            calcPositions(op.getLeftOperand(), nodes, depth+1);
+            // System.out.println(": " + term.toString());
+            nodes.add(new NodeInfo(op, count++, depth));
+            calcPositions(op.getRightOperand(), nodes, depth+1);
+        }
+    }
+
 
     // testes dos métodos
     public static void main(String[] args){
-        String strExp = "((5--1)*(2*(6/2)))";
+        String strExp = "((5-1)*(2*(6/2.1)))";
 
         ExpressionTree exp = new ExpressionTree(strExp);
         exp.build();
         System.out.println(exp.evaluate());
         System.out.println(exp.verifyExpression(exp.expression));
-        System.out.println(exp.stringExpression(exp.root));
+
+        exp.draw();
+        // System.out.println(exp.height(exp.root));
     }
 
 }
