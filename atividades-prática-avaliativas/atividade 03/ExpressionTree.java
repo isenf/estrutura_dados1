@@ -28,6 +28,11 @@ public class ExpressionTree{
         this.root = null;
     }
 
+    // setters
+    public void setExpression(String exp){
+        this.expression = exp;
+    }
+
     // métodos de verificação
     /** verifica se a árvore está vazia ou não
      * 
