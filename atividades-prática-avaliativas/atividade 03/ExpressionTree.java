@@ -380,6 +380,87 @@ public class ExpressionTree{
         }
     }
 
+    // percursos
+
+    /** executa o percurso preorder sobre a árvore
+     * 
+     * @param term termo a iniciar o percurso
+     * @return string com a representação do percurso
+     */
+    protected String stringPreorder(ExpressionTerm term){
+        if(term == null) return "";
+        if(term instanceof ExpressionVariable) return term.toString();
+
+        ExpressionOperator op = (ExpressionOperator) term;
+        String s = op.toString() + ", ";
+        s += stringPreorder(op.getLeftOperand()) + ", ";
+        s += stringPreorder(op.getRightOperand());
+
+        return s;
+    }
+
+    /** executa o percurso inorder sobre a árvore
+     * 
+     * @param term termo a iniciar o percurso
+     * @return string com a representação do percurso
+     */
+    protected String stringInorder(ExpressionTerm term){
+        if(term == null) return "";
+        if(term instanceof ExpressionVariable) return term.toString();
+
+        ExpressionOperator op = (ExpressionOperator) term;
+        String s = stringInorder(op.getLeftOperand()) + ", ";
+        s += op.toString() + ", ";
+        s += stringInorder(op.getRightOperand());
+
+        return s;
+
+    }
+
+    /** executa o percurso postorder sobre a árvore
+     * 
+     * @param term termo a iniciar o percurso
+     * @return string com a representação do percurso
+     */
+    protected String stringPostorder(ExpressionTerm term){
+        if(term == null) return "";
+        if(term instanceof ExpressionVariable) return term.toString();
+
+        ExpressionOperator op = (ExpressionOperator) term;
+        String s = "";
+        s += stringPostorder(op.getLeftOperand()) + ", ";
+        s += stringPostorder(op.getRightOperand()) + ", ";
+        s += op.toString();
+
+        return s;
+    }
+
+    /** executa o euler tour sobre a árvore
+     * 
+     * @param term termo a iniciar o percurso
+     * @return string com a representação do percurso
+     */
+    protected String stringEulerTour(ExpressionTerm term){
+        String s = term.toString() + ", ";
+
+        if(term instanceof ExpressionOperator){
+            ExpressionOperator op = (ExpressionOperator) term;
+            s += stringEulerTour(op.getLeftOperand()) + ", ";
+        }
+        
+        s += term.toString() + ", ";
+
+        if(term instanceof ExpressionOperator){
+            ExpressionOperator op = (ExpressionOperator) term;
+            s += stringEulerTour(op.getLeftOperand()) + ", ";
+        }
+        
+        s+= term.toString();
+
+        return s;    
+
+    }
+
     
     // testes dos métodos
     public static void main(String[] args){
