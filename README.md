@@ -9,11 +9,11 @@ Principal referência bibliográfica: GOODRICH, Michael T.; TAMASSIA, Roberto. E
 
 ### Introdução e sintaxe Java
 - Uso de classes, métodos, variáveis e tipos em Java
-- Estrutura condicional: `if-else` e 'switch-case' 
-- Estrutura de repetição: 'for', 'while' e 'do-while'
+- Estrutura condicional: `if-else` e `switch-case` 
+- Estrutura de repetição: `for`, `while` e `do-while`
 - Enumeradores (Enum)
 - Modificadores (public, private, protected, final, static)
-- Tratamento de excessão (`try-catch' e 'throws')
+- Tratamento de excessão (`try-catch` e `throws`)
 - Tipos genéricos 
 
 ### Índices, nodos e recursão
@@ -42,19 +42,19 @@ Principal referência bibliográfica: GOODRICH, Michael T.; TAMASSIA, Roberto. E
 ### Árvore (Tree)
 - Conceitos básicos: raiz, folha, pai, filho, irmão(s), profundidade, altura
 - Implementação do TAD Árvore Genérica (com TAD lista de nodos)
-- Implementação do TAD Árvore Binária (filhos 'left' e 'right')
+- Implementação do TAD Árvore Binária (filhos `left` e `right`)
 - Percursos em árvores genéricas: 
-    - Prefixado -> `preorder'
-    - Posfixado -> 'postorder'
+    - Prefixado -> `preorder`
+    - Posfixado -> `postorder`
 - Percursos em árvores binárias:
-    - Interfixado -> 'inorder'
-    - Tour de Euler -> 'euler-tour'
+    - Interfixado -> `inorder`
+    - Tour de Euler -> `euler-tour`
 
 ---
 
 ## Atividades Práticas
 - **Lista de contatos**, implementada com TAD lista duplamente encadeada (salva em um arquivo txt)
-- **Verificador de balanceamento de parenteses**, uso de pilha para checar expressões com `()`, '[]` e '{}`
+- **Verificador de balanceamento de parenteses**, uso de pilha para checar expressões com `()`, `[]` e `{}`
 - **Avaliação de uma expressão aritmética**, árvore binária própria que avalia uma expressão aritmética e, caso seja válida, constrói uma árvore (calcula o resultado da expressão e desenha a árvore)
 
 
