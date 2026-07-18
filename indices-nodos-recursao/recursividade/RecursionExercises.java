@@ -268,7 +268,7 @@ public class RecursionExercises{
      * @param i índice inicial da string
      * @param aux arranjo auxiliar que mantém o número de vogais (índice 0) e de consoantes (índice 1)
      * 
-     * @return true se tem mais vogais, false caso contrário
+     * @return um inteiro que, se > 0, tem mais vogais do que consoantes
      */
     private static int moreVowels(String S, int i){
         if(i == S.length()) return 0;
@@ -289,6 +289,40 @@ public class RecursionExercises{
      */
     public static boolean isVowel(char c){
         return VOWELS.indexOf(c) != -1;
+    }
+
+    
+    public static boolean iterativeSumBefore(int[] A, int i){
+        for(int k = i-1; k >= 0; k--){
+            for(int j = k-1; j >= 0; j--){
+                if(k != j && A[j] + A[k] == A[i]) return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean sumBefore(int [] A, int i){
+        return sumBefore(A, i, i-1, i-2);
+    }
+
+    private static boolean sumBefore(int[] A, int i, int j, int k){
+        if(j <= 0 && k <= 0) return false;
+
+        if(j != k && A[j] + A[k] == A[i]) return true;
+
+        if(j > 0) return sumBefore(A, i, j-1, k);
+
+        return sumBefore(A, i, j, k-1);
+    }
+
+    public static void invString(String s, int n){
+        if(n == 1){
+            System.out.println(s.charAt(n-1));
+            return;
+        }
+
+        System.out.print(s.charAt(n-1));
+        invString(s, n-1);
     }
 
     // testa os algoritmos recursivos
@@ -333,5 +367,8 @@ public class RecursionExercises{
         s = "baanana";
         System.out.println("\nA string \"" + s + "\" tem mais vogais? " + moreVowels(s));
 
+        System.out.println(sumBefore(new int[]{2, 4, 1, 9, 1, 1, 1, 1, 1, 1, 1, 1, 6, 0}, 12));
+
+        invString("yippeeeeee", 10);
     }
 }
