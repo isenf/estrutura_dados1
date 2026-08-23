@@ -4,7 +4,12 @@ Este repositório é destinado para as atividades, códigos e estudos referentes
 
 Principal referência bibliográfica: GOODRICH, Michael T.; TAMASSIA, Roberto. Estruturas de dados & algoritmos em Java. Bookman Editora, 2013.
 
----
+<p style="text-align: center;">
+    <img src="https://img.shields.io/badge/Java-ED8B00?style=flat&logo=openjdk&logoColor=white">
+    <img src="https://wakatime.com/badge/user/80534b34-ed1e-4b71-9af1-e2de960ccc58/project/15728e7a-5ef1-4616-82ce-d056ea59de1d.svg">
+</p>
+
+
 ## Conteúdos
 
 ### Introdução e sintaxe Java
